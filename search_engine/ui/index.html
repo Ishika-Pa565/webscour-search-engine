@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>WebScour Search</title>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main container */
+.container {
+    text-align: center;
+    width: 500px;
+}
+
+/* Title */
+h1 {
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+/* Search box area */
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Input */
+input {
+    width: 300px;
+    padding: 12px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+}
+
+/* Buttons */
+button {
+    margin-left: 10px;
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Search button */
+.search-btn {
+    background: #4285f4;
+    color: white;
+}
+
+/* Reset button */
+.reset-btn {
+    background: #e0e0e0;
+}
+
+/* Results */
+#results {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+}
+
+/* Each result card */
+li {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>WebScour</h1>
+
+<div class="search-box">
+<input type="text" id="query" placeholder="Search the web...">
+<button class="search-btn" onclick="search()">Search</button>
+<button class="reset-btn" onclick="resetSearch()">Reset</button>
+</div>
+
+<ul id="results"></ul>
+
+</div>
+
+<script>
+
+async function search(){
+
+let query = document.getElementById("query").value
+
+if(query === "") return
+
+let response = await fetch(`http://127.0.0.1:8000/search?q=${query}`)
+
+let data = await response.json()
+
+let results = document.getElementById("results")
+
+results.innerHTML = ""
+
+data.forEach(item => {
+
+let li = document.createElement("li")
+
+li.innerHTML = `<strong>${item[0]}</strong><br>Score: ${item[1].toFixed(2)}`
+
+results.appendChild(li)
+
+})
+
+}
+
+/* Reset function */
+function resetSearch(){
+    document.getElementById("query").value = ""
+    document.getElementById("results").innerHTML = ""
+}
+
+</script>
+
+</body>
+
+</html>
